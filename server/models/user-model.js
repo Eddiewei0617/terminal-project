@@ -38,6 +38,9 @@ userSchema.methods.isStudent = function () {
 userSchema.methods.isInstructor = function () {
   return this.role == "instructor";
 };
+userSchema.methods.isAdmin = function () {
+  return this.role == "admin";
+};
 
 // mongoose schema middleware
 // 存進來之前先檢查此密碼是否有被更改過或是新的，符合以上的話就給他加密存起來

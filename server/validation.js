@@ -21,5 +21,16 @@ const loginValidation = (data) => {
   return schema.validate(data);
 };
 
+// course posting Validation
+const courseValidation = (data) => {
+  const schema = Joi.object({
+    title: Joi.string().min(6).max(50).required(),
+    description: Joi.string().min(6).max(50).required(),
+    price: Joi.number().min(10).max(9999).required(),
+  });
+  return schema.validate(data);
+};
+
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
+module.exports.courseValidation = courseValidation;

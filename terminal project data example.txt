@@ -1,0 +1,24 @@
+
+{
+    "username": "monkey",
+    "email": "monkey@test.com",
+    "password": "111111",
+    "role": "instructor"
+}
+
+
+{
+  
+    "email": "monkey@test.com",
+    "password": "111111"
+    
+}
+
+
+
+
+{
+    "title": "How to make apple juice?",
+    "description": "30 days from planting seeds to make tasty juice.",
+    "price": 5000
+}
