@@ -17,14 +17,27 @@ const CourseComponent = ({ currentUser, setCurrentUser }) => {
     } else {
       _id = "";
     }
-    courseService
-      .get(_id)
-      .then((data) => {
-        setCourseData(data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+
+    if (currentUser.user.role === "instructor") {
+      courseService
+        .get(_id)
+        .then((data) => {
+          setCourseData(data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (currentUser.user.role == "student") {
+      courseService
+        .getEnrolledCourses(_id)
+        .then((data) => {
+          console.log("student", data);
+          setCourseData(data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   return (
@@ -48,6 +61,11 @@ const CourseComponent = ({ currentUser, setCurrentUser }) => {
           <h1>Welcome to instructor's Course page.</h1>
         </div>
       )}
+      {currentUser && currentUser.user.role === "student" && (
+        <div>
+          <h1>Welcome to student's Course page.</h1>
+        </div>
+      )}
       {currentUser && courseData && courseData.length !== 0 && (
         <div>
           <p>Here's the data we got back from server.</p>
@@ -57,7 +75,7 @@ const CourseComponent = ({ currentUser, setCurrentUser }) => {
                 <h5 className="card-title">{course.title}</h5>
                 <p className="card-text">{course.description}</p>
                 <p className="card-text">
-                  Student count : {course.students.length}
+                  Student count : {course.student.length}
                 </p>
                 <button className="btn btn-primary me-2">
                   $ {course.price}
@@ -65,12 +83,6 @@ const CourseComponent = ({ currentUser, setCurrentUser }) => {
               </div>
             </div>
           ))}
-        </div>
-      )}
-
-      {currentUser && currentUser.user.role === "student" && (
-        <div>
-          <h1>Welcome to student's Course page.</h1>
         </div>
       )}
     </div>

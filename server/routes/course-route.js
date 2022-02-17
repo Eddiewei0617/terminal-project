@@ -30,7 +30,36 @@ router.get("/instructor/:_instructor_id", (req, res) => {
       console.log("instructor data : ", data);
     })
     .catch((err) => {
-      res.status(500).send("Cannot get coursr data.");
+      res.status(500).send("Cannot get course data.");
+    });
+});
+
+// make a route for a course for student
+router.get("/findByName/:name", (req, res) => {
+  let { name } = req.params;
+
+  // 如果在搜尋bar想用像是MySQL的 Like% 語法:
+  // db.users.find({name: {$regex: 'sometext'}})
+  Course.find({ title: { $regex: name } })
+    .populate("instructor", ["username", "email"])
+    .then((course) => {
+      res.status(200).send(course);
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+});
+
+// which student is at the course page
+router.get("/student/:_student_id", (req, res) => {
+  let { _student_id } = req.params;
+  Course.find({ student: _student_id })
+    .populate("instructor", ["username", "email"])
+    .then((courses) => {
+      res.status(200).send(courses);
+    })
+    .catch((err) => {
+      res.status(500).send("Cannot get course data.");
     });
 });
 
@@ -82,6 +111,20 @@ router.post("/", async (req, res) => {
     res.status(200).send("New course has been saved.");
   } catch (err) {
     res.status(400).send("Cannot be saved.");
+  }
+});
+
+// the students enroll courses
+router.post("/enroll/:_id", async (req, res) => {
+  let { _id } = req.params;
+  let { user_id } = req.body;
+  try {
+    let course = await Course.findOne({ _id });
+    course.student.push(user_id);
+    await course.save();
+    res.send("Done enrollment.");
+  } catch (err) {
+    res.send(err);
   }
 });
 
