@@ -20,6 +20,20 @@ router.get("/", (req, res) => {
     });
 });
 
+// which instructor is at course page
+router.get("/instructor/:_instructor_id", (req, res) => {
+  let { _instructor_id } = req.params;
+  Course.find({ instructor: _instructor_id })
+    .populate("instructor", ["username", "email"])
+    .then((data) => {
+      res.send(data);
+      console.log("instructor data : ", data);
+    })
+    .catch((err) => {
+      res.status(500).send("Cannot get coursr data.");
+    });
+});
+
 // search for the single course
 router.get("/:_id", (req, res) => {
   let { _id } = req.params;
